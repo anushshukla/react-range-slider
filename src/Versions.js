@@ -128,24 +128,27 @@ const WithDualRangeSlider2HOC = Component => props => {
     onTouchStart = event => {
       const cordX = this.getXFromEvent(event);
       const left =  parseInt(cordX/this.props.boxSize * 100, 10);
-      const rangeStartLeftDiff = this.state.rangeStartLeft - left;
-      const rangeEndLeftDiff = this.state.rangeEndLeft - left;
-      this.setState({ isMoving: false });
-      let updateState = null
-      if (rangeStartLeftDiff > rangeEndLeftDiff) {
-        updateState = { rangeStartLeft: left };
-      } else {
-        updateState = { rangeEndLeft: left };
-      }
-      console.error('onTouchStart', left, this.state, updateState);
-      this.setState(updateState);
+      const rangeStartLeftDiff = Math.abs(this.state.rangeStartLeft - left);
+      const rangeEndLeftDiff = Math.abs(this.state.rangeEndLeft - left);
+      this.setState(state => {
+        let rangeStartLeft = state.rangeStartLeft;
+        let rangeEndLeft = state.rangeEndLeft;
+        if (rangeStartLeftDiff > rangeEndLeftDiff) {
+          rangeStartLeft = left;
+        } else {
+          rangeEndLeft = left;
+        }
+        const updateState = { rangeStartLeft, rangeEndLeft };
+        console.error('onTouchStart', left, state, updateState);
+        return updateState;
+      });
     }
     onTouchMove = event => {
       const cordX = this.getXFromEvent(event);
       const left =  parseInt(cordX/this.props.boxSize * 100, 10);
       console.error('onTouchMove', left);
       this.setState({ isMoving: true });
-      if (left === this.state.rangeEndLeft) {
+      if (left === this.state.rangeStartLeft) {
         this.setState({ rangeStartLeft: left });
       } else if (left === this.state.rangeEndLeft) {
         this.setState({ rangeEndLeft: left });
