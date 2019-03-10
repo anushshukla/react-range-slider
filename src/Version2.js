@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from 'react-router-dom';
 import { 
   Flex,
   RangeValue,
@@ -9,20 +8,6 @@ import {
 } from './styles';
 import "./styles.css";
 
-const Menu = props => 
-  <>
-    <div>
-      <Link to="version-1">
-        Version 1
-      </Link>
-    </div>
-    <div>
-      <Link to="version-2">
-        Version 2
-      </Link>
-    </div>
-  </>
-
 const WithDualRangeSlider2HOC = Component => props => {
   class WithDualRangeSlider2 extends React.Component {
     getUnit = () => this.props.scale/this.props.boxSize;
@@ -30,24 +15,6 @@ const WithDualRangeSlider2HOC = Component => props => {
       rangeStartLeft: this.getUnit() * 100 * (this.props.defaultRangeStart - this.props.rangeStartMin),
       rangeEndLeft: this.getUnit() * 100 * (this.props.defaultRangeEnd - this.props.rangeStartMin),
       activeRange: ''
-    };
-    onInputRangeChange = rangePosition => event => {
-      event.persist();
-      const value = Number.parseInt(
-        event.target.value,
-        10
-      );
-      this.setState(state => {
-        const { range } = state;
-        
-        return {
-          ...state,
-          range: {
-            ...range,
-            [rangePosition]: value
-          }
-        };
-      }, this.afterOnChange);
     };
     getXFromEvent = event => {
       const leftAbsolute = !!('ontouchstart' in window) ? event.touches[0].clientX : event.pageX;
@@ -166,10 +133,6 @@ const SliderWithDrag2 = WithDualRangeSlider2HOC(Slider2);
 
 const onAfterChange = state => console.log(state);
 
-export const Version2 = props =>
-  <>
-    <Menu />
-    <SliderWithDrag2 onAfterChange={onAfterChange} {...props} />
-  </>
+export const Version2 = props => <SliderWithDrag2 onAfterChange={onAfterChange} {...props} />
 
 export default Version2;

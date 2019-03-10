@@ -1,24 +1,9 @@
 import React from "react";
-import { Link } from 'react-router-dom';
 import { 
   Flex,
   RangeValue,
 } from './styles';
 import "./styles.css";
-
-const Menu = props => 
-  <>
-    <div>
-      <Link to="version-1">
-        Version 1
-      </Link>
-    </div>
-    <div>
-      <Link to="version-2">
-        Version 2
-      </Link>
-    </div>
-  </>
 
 const WithDualRangeSliderHOC = Component => props => {
   class WithDualRangeSlider extends React.Component {
@@ -107,10 +92,6 @@ const SliderWithDrag =  WithDualRangeSliderHOC(Slider);
 
 const onAfterChange = state => console.log(state);
 
-const Version1 = props =>
-  <>
-    <Menu />
-    <SliderWithDrag onAfterChange={onAfterChange} {...props} />
-  </>
+const Version1 = props => <SliderWithDrag onAfterChange={onAfterChange} {...props} />
 
 export default Version1;
