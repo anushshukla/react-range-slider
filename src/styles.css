@@ -12,9 +12,7 @@
   justify-content: center;
 }
 
-section.range-slider {
-  height: 50px;
-}
+section.range-slider {}
 
 section.range-slider input[type="range"] {
   pointer-events: none;

@@ -17,7 +17,6 @@ export const SliderLine = styled.div`
   height: 2px;
   background: #dfe0e3;
   position: relative;
-  margin-top: 15px;
 `;
 
 export const SelectedSliderLine = styled.div`

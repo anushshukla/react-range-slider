@@ -50,7 +50,8 @@ const WithDualRangeSlider2HOC = Component => props => {
       }, this.afterOnChange);
     };
     getXFromEvent = event => {
-      const leftOffset = event.touches[0].clientX - event.currentTarget.getBoundingClientRect().left;
+      const leftAbsolute = !!('ontouchstart' in window) ? event.touches[0].clientX : event.pageX;
+      const leftOffset = leftAbsolute - event.currentTarget.getBoundingClientRect().left;
       if (leftOffset > this.props.boxSize) {
         return this.props.boxSize;
       } else if (leftOffset < 0) {
@@ -122,33 +123,44 @@ const WithDualRangeSlider2HOC = Component => props => {
   return <WithDualRangeSlider2 {...props} />;
 };
 
-const Slider2 = props => (
-  <section className="range-slider">
-    <Flex>
-      <RangeValue>From {props.range.start} years</RangeValue>
-      <RangeValue>To {props.range.end} years</RangeValue>
-    </Flex>
-    <SliderLine
-      onTouchStart={props.onTouchStart}
-      onTouchMove={props.onTouchMove}
-      onTouchEnd={props.onTouchEnd}
-    >
-      <SelectedSliderLine left={`${props.rangeStartLeft}%`} width={`${props.selectedRangeWidth}%`} />
-      <SliderIcon
-        left={`${props.rangeStartLeft}%`}
-        scale={props.isActiveRange('rangeStartLeft') ? 2 : 1}
-      />
-      <SliderIcon
-        left={`${props.rangeEndLeft}%`}
-        scale={props.isActiveRange('rangeEndLeft') ? 2 : 1}
-      />
-    </SliderLine>
-    <div className='range-ruler'>
-      <div className='range-start' />
-      <div className='range-end' />
-    </div>
-  </section>
-);
+const Slider2 = props => {
+  const isTouchSupported = !!('ontouchstart' in window);
+  const start = isTouchSupported ? 'onTouchStart' : 'onMouseDown';
+  const up = isTouchSupported ? 'onTouchEnd'   : 'onMouseUp';
+  const move = isTouchSupported ? 'onTouchMove'  : 'onMouseMove';
+  const eventListners = {
+    [start]: props.onTouchStart,
+    [up]: props.onTouchEnd,
+    [move]: props.onTouchMove,
+  };
+  return (
+    <section className="range-slider">
+      <Flex>
+        <RangeValue>From {props.range.start} years</RangeValue>
+        <RangeValue>To {props.range.end} years</RangeValue>
+      </Flex>
+      <div style={{ margin: '15px 0'}}>
+        <div style={{ padding: '10px 0'}} {...eventListners}>
+        <SliderLine>
+          <SelectedSliderLine left={`${props.rangeStartLeft}%`} width={`${props.selectedRangeWidth}%`} />
+          <SliderIcon
+            left={`${props.rangeStartLeft}%`}
+            scale={props.isActiveRange('rangeStartLeft') ? 2 : 1}
+          />
+          <SliderIcon
+            left={`${props.rangeEndLeft}%`}
+            scale={props.isActiveRange('rangeEndLeft') ? 2 : 1}
+          />
+        </SliderLine>
+        </div>
+      </div>
+      <div className='range-ruler'>
+        <div className='range-start' />
+        <div className='range-end' />
+      </div>
+    </section>
+  );
+};
 
 const SliderWithDrag2 = WithDualRangeSlider2HOC(Slider2);
 
