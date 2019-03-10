@@ -1,14 +1,25 @@
 import React, { useState } from "react";
-import {
+/*import {
   BrowserRouter as Router,
   Route,
   Switch,
   Link,
-} from 'react-router-dom';
+} from 'react-router-dom';*/
 import Version1 from './Version1';
 import Version2 from './Version2';
 
-const Menu = props => 
+
+/*<Router>
+  <Menu>
+    <Switch>
+      <Route path="/" exact component={props => <Version2 {...props} {...moreProps} />} />
+      <Route path="/version-1" exact component={props => <Version1 {...props} {...moreProps} />} />
+      <Route path="/version-2" exact component={props => <Version2 {...props} {...moreProps} />} />
+    </Switch>
+  </Menu>
+</Router>*/
+
+/*const Menu = props => 
   <>
     <div>
       <Link to="version-1">
@@ -21,7 +32,7 @@ const Menu = props =>
       </Link>
     </div>
     {props.children}
-  </>
+  </>*/
 
 const Routes = () => {
   const [rangeStartMin, setRangeStartMin] = useState(21);
@@ -67,15 +78,7 @@ const Routes = () => {
       <input type="number" value={rangeEndMax} onChange={updateInput(setRangeEndMax)} />
       <br /><label>Range Difference</label><br/>
       <input type="number" value={rangeDiffLimit} onChange={updateInput(setRangeDiffLimit)} />
-      <Router>
-        <Menu>
-          <Switch>
-            <Route path="/" exact component={props => <Version2 {...props} {...moreProps} />} />
-            <Route path="/version-1" exact component={props => <Version1 {...props} {...moreProps} />} />
-            <Route path="/version-2" exact component={props => <Version2 {...props} {...moreProps} />} />
-          </Switch>
-        </Menu>
-      </Router>
+      <Version2 {...moreProps} />
     </div>
   )
 };
