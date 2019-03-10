@@ -53,7 +53,7 @@ const Routes = () => {
       <input type="number" value={rangeDiffLimit} onChange={updateInput(setRangeDiffLimit)} />
       <Router>
         <Switch>
-          <Route path="/" exact component={props => <Version1 {...props} {...moreProps} />} />
+          <Route path="/" exact component={props => <Version2 {...props} {...moreProps} />} />
           <Route path="/version-1" exact component={props => <Version1 {...props} {...moreProps} />} />
           <Route path="/version-2" exact component={props => <Version2 {...props} {...moreProps} />} />
         </Switch>
