@@ -4,7 +4,7 @@ export const Flex = styled.div`
   display: flex;
   flex-wrap: wrap;
   align-content: space-between;
-  margin-top: 15px;
+  margin-top: 10px 0;
 `;
 
 export const RangeValue = styled.div`
@@ -13,7 +13,7 @@ export const RangeValue = styled.div`
 `;
 
 export const SliderLine = styled.div`
-  width: 300px;
+  width: 270px;
   height: 2px;
   background: #dfe0e3;
   position: relative;
@@ -32,7 +32,8 @@ export const SelectedSliderLine = styled.div`
 export const SliderIcon = styled.div`
   position: absolute;
   top: -5px;
-  left: ${props => props.left};
+  left: ${({ left }) => left};
+  transform: ${({ scale = 1 }) => `scale(${scale})`};
   height: 12px;
   width: 12px;
   background: #00bcd5;
