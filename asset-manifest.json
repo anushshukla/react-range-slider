@@ -1,13 +1,14 @@
 {
-  "main.css": "/react-range-slider/static/css/main.353b5b69.chunk.css",
-  "main.js": "/react-range-slider/static/js/main.72d363d7.chunk.js",
-  "main.js.map": "/react-range-slider/static/js/main.72d363d7.chunk.js.map",
-  "static/js/1.9e29df2c.chunk.js": "/react-range-slider/static/js/1.9e29df2c.chunk.js",
-  "static/js/1.9e29df2c.chunk.js.map": "/react-range-slider/static/js/1.9e29df2c.chunk.js.map",
-  "runtime~main.js": "/react-range-slider/static/js/runtime~main.3d2df965.js",
-  "runtime~main.js.map": "/react-range-slider/static/js/runtime~main.3d2df965.js.map",
-  "static/css/main.353b5b69.chunk.css.map": "/react-range-slider/static/css/main.353b5b69.chunk.css.map",
+  "main.css": "/react-range-slider/static/css/main.ee99ff21.chunk.css",
+  "main.js": "/react-range-slider/static/js/main.d15d9540.chunk.js",
+  "main.js.map": "/react-range-slider/static/js/main.d15d9540.chunk.js.map",
+  "runtime~main.js": "/react-range-slider/static/js/runtime~main.06034bc0.js",
+  "runtime~main.js.map": "/react-range-slider/static/js/runtime~main.06034bc0.js.map",
+  "static/js/2.a8e9721e.chunk.js": "/react-range-slider/static/js/2.a8e9721e.chunk.js",
+  "static/js/2.a8e9721e.chunk.js.map": "/react-range-slider/static/js/2.a8e9721e.chunk.js.map",
   "index.html": "/react-range-slider/index.html",
-  "precache-manifest.1e9a8ff131268273aacc0f6327f67bfd.js": "/react-range-slider/precache-manifest.1e9a8ff131268273aacc0f6327f67bfd.js",
-  "service-worker.js": "/react-range-slider/service-worker.js"
+  "precache-manifest.2de5144215050dd70f9c99d87857fdec.js": "/react-range-slider/precache-manifest.2de5144215050dd70f9c99d87857fdec.js",
+  "service-worker.js": "/react-range-slider/service-worker.js",
+  "static/css/main.ee99ff21.chunk.css.map": "/react-range-slider/static/css/main.ee99ff21.chunk.css.map",
+  "static/media/logo.svg": "/react-range-slider/static/media/logo.5d5d9eef.svg"
 }
