@@ -1,17 +1,35 @@
 {
-  "name": "my-app",
-  "version": "0.1.0",
+  "name": "slider",
+  "version": "1.0.0",
+  "description": "Range Slider",
+  "homepage": "http://anushshukla.github.io/react-range-slider",
+  "keywords": [
+    "slider",
+    "dual",
+    "range",
+    "react"
+  ],
   "private": true,
   "dependencies": {
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
-    "react-scripts": "2.1.8"
+    "react-router-dom": "^5.0.0",
+    "react-scripts": "2.1.8",
+    "styled-components": "^4.1.3"
+  },
+  "devDependencies": {
+    "gh-pages": "^2.0.1"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "set PORT=3006 && react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "predeploy": "yarn build",
+    "deploy": "gh-pages -d build",
+    "forcestart": "set PORT=3006 yarn && && react-scripts start",
+    "buildserve": "yarn build && serve -s build",
+    "getcoverage": "yarn test --coverage"
   },
   "eslintConfig": {
     "extends": "react-app"
