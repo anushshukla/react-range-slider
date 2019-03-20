@@ -1,8 +1,11 @@
 import styled from 'styled-components';
 
 export const DualRangeSliderSection = styled.div`
-  width: 100%;
+  width: 502px;
   margin: 0 auto;
+  @media (max-width: 400px) {
+    width: 95%;
+  }
 `;
 
 export const Flex = styled.div`

@@ -1,10 +1,7 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import ComponentToTest from 'ComponentToTest';
-import ContextProvider from '../../Context';
-import TooltipBox from '../../TooltipBox';
-import TooltipQuestionMark from '../../../../theme/TooltipQuestionMark';
-import { act } from 'react-dom/test-utils';
+import ComponentToTest from 'src/Pages/Provider';
+import ReactTestUtils from 'react-dom/test-utils';
 
 const props = {
   canShowTooltip: false,

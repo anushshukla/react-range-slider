@@ -12,12 +12,3 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
-
-#root {
-  max-width: 100%;
-  overflow: hidden;
-  text-align: center;
-  margin: 0 auto;
-  display: flex;
-  justify-content: center;
-}
