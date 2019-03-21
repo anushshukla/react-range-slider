@@ -43,7 +43,7 @@ export const SelectedSliderLine = styled.div`
   width: ${props => props.width};
   height: 2px;
   background: #00bcd5;
-  transition: all 0.5s ease;
+  transition: all 0.3s ease;
 `;
 
 export const SliderIcon = styled.div`
@@ -60,13 +60,10 @@ export const SliderIcon = styled.div`
     width: ${({ diameter }) => diameter};
     height: ${({ diameter }) => diameter};
   }
-  transition: left 0.5s ease;
-`;
-
-export const LeftSliderIcon = styled(SliderIcon)`
-  left: ${({ left }) => left};
-`;
-
-export const RightSliderIcon = styled(SliderIcon)`
+  transition: all 0.45s ease;
   ${({ positionFrom, positionAt }) => `${positionFrom}: ${positionAt}`}
 `;
+
+export const LeftSliderIcon = styled(SliderIcon)``;
+
+export const RightSliderIcon = styled(SliderIcon)``;

@@ -57,7 +57,10 @@ const View = props => {
             <LeftSliderIcon
               diameter={`${getSliderIconDiameter()}px`}
               top={`-${sliderIconPosTop}px`}
-              left={`${rangeStartLeft}%`}
+              positionFrom={`${rangeStartLeft === 0 ? 'left' : 'right'}`}
+              positionAt={`${
+                rangeStartLeft === 0 ? 0 : `${100 - rangeStartLeft}%`
+              }`}
               scale={sliderIconScaling('rangeStartLeft')}
               ref={sliderIconRef}
             />
