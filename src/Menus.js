@@ -1,4 +1,5 @@
 import React from 'react';
+import 'Pages/Homepage/menus.css';
 
 const Menus = () => (
   <div>
@@ -7,7 +8,7 @@ const Menus = () => (
         <a href="/">Homepage</a>
       </li>
       <li>
-        <a href="demo/range-slider">Range Slider Demo</a>
+        <a href="/demo/range-slider">Range Slider Demo</a>
       </li>
     </ul>
   </div>
