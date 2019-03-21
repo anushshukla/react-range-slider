@@ -11,6 +11,7 @@
   ],
   "private": true,
   "dependencies": {
+    "prop-types": "^15.7.2",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
     "react-router-dom": "^5.0.0",
@@ -18,7 +19,19 @@
     "styled-components": "^4.1.3"
   },
   "devDependencies": {
-    "gh-pages": "^2.0.1"
+    "eslint": "^5.15.3",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-config-prettier": "^4.1.0",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-jsx-a11y": "^6.2.1",
+    "eslint-plugin-prettier": "^3.0.1",
+    "eslint-plugin-react": "^7.12.4",
+    "gh-pages": "^2.0.1",
+    "husky": "^1.3.1",
+    "lint-staged": "^8.1.5",
+    "prettier": "^1.16.4",
+    "pretty-quick": "^1.10.0",
+    "react-test-renderer": "^16.8.4"
   },
   "scripts": {
     "start": "set PORT=3006 && react-scripts start",
@@ -30,10 +43,26 @@
     "forcestart": "set PORT=3006 yarn && && react-scripts start",
     "buildserve": "yarn build && serve -s build",
     "serve": "serve -s build",
-    "getcoverage": "yarn test --coverage"
+    "getcoverage": "yarn test --coverage",
+    "fix": "eslint --fix src",
+    "pretty": "prettier --write --tab-width 2 \"src/**/*.js\"",
+    "stage": "git add . && lint-staged && git add ."
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "lint-staged"
+    }
   },
   "eslintConfig": {
     "extends": "react-app"
+  },
+  "lint-staged": {
+    "*.{js,jsx}": [
+      "pretty-quick --staged",
+      "eslint --fix src",
+      "git add"
+    ]
   },
   "browserslist": [
     ">0.2%",

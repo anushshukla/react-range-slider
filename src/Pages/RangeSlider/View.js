@@ -1,4 +1,5 @@
-import React, { memo } from "react";
+import React, { memo } from 'react';
+import PropTypes from 'prop-types';
 import {
   DualRangeSliderSection,
   Flex,
@@ -14,8 +15,8 @@ import {
 const View = props => {
   const isTouchSupported = !!('ontouchstart' in window);
   const start = isTouchSupported ? 'onTouchStart' : 'onMouseDown';
-  const up = isTouchSupported ? 'onTouchEnd'   : 'onMouseUp';
-  const move = isTouchSupported ? 'onTouchMove'  : 'onMouseMove';
+  const up = isTouchSupported ? 'onTouchEnd' : 'onMouseUp';
+  const move = isTouchSupported ? 'onTouchMove' : 'onMouseMove';
   const {
     getSliderIconDiameter,
     onTouchStart,
@@ -34,9 +35,9 @@ const View = props => {
     [start]: onTouchStart,
     [move]: onMove,
     [up]: onTouchEnd,
-    onDragStart,
+    onDragStart
   };
-  const sliderIconScaling = activeRange => isActiveRange(activeRange) ? 2 : 1;
+  const sliderIconScaling = activeRange => (isActiveRange(activeRange) ? 2 : 1);
   const sliderRangeHeight = 2;
   const sliderIconPosTop = (getSliderIconDiameter() - sliderRangeHeight) / 2;
   return (
@@ -48,13 +49,16 @@ const View = props => {
       <SliderLineContainer>
         <SliderLineWrapper {...eventListners}>
           <SliderLine ref={wrapperRef} height={`${sliderRangeHeight}px`}>
-            <SelectedSliderLine left={`${rangeStartLeft}%`} width={`${selectedRangeWidth}%`} />
+            <SelectedSliderLine
+              left={`${rangeStartLeft}%`}
+              width={`${selectedRangeWidth}%`}
+            />
             <LeftSliderIcon
               diameter={`${getSliderIconDiameter()}px`}
               top={`-${sliderIconPosTop}px`}
               left={`${rangeStartLeft}%`}
               scale={sliderIconScaling('rangeStartLeft')}
-              ref={sliderIconRef} 
+              ref={sliderIconRef}
             />
             <RightSliderIcon
               diameter={`${getSliderIconDiameter()}px`}
@@ -66,12 +70,27 @@ const View = props => {
           </SliderLine>
         </SliderLineWrapper>
       </SliderLineContainer>
-      <div className='range-ruler'>
-        <div className='range-start' />
-        <div className='range-end' />
+      <div className="range-ruler">
+        <div className="range-start" />
+        <div className="range-end" />
       </div>
     </DualRangeSliderSection>
   );
+};
+
+View.propTypes = {
+  getSliderIconDiameter: PropTypes.func.isRequired,
+  onTouchStart: PropTypes.func.isRequired,
+  onMove: PropTypes.func.isRequired,
+  onTouchEnd: PropTypes.func.isRequired,
+  onDragStart: PropTypes.func.isRequired,
+  isActiveRange: PropTypes.func.isRequired,
+  getRange: PropTypes.func.isRequired,
+  rangeStartLeft: PropTypes.number.isRequired,
+  rangeEndLeft: PropTypes.number.isRequired,
+  wrapperRef: PropTypes.shape({}).isRequired,
+  selectedRangeWidth: PropTypes.number.isRequired,
+  sliderIconRef: PropTypes.shape({}).isRequired
 };
 
 export default memo(View);

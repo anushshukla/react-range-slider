@@ -11,3 +11,5 @@ export const ResponsiveWidth = styled.div`
 export const TopSpace = styled.div`
   margin-top: ${({ space }) => space};
 `;
+
+export const Label = styled.label``;

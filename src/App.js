@@ -2,10 +2,10 @@ import React from 'react';
 import Routes from 'Routes';
 import Menus from 'Menus';
 
-const App = props => (
+const App = () => (
   <>
     <Menus />
-  	<Routes />
+    <Routes />
   </>
 );
 
