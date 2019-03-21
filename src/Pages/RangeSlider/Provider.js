@@ -1,18 +1,29 @@
 import React, { useState, useEffect, useRef, memo } from "react";
 
+const getCurrentWindowWidth = () => window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;;
+
+const getNearestMultipleOf = (number, multiplier) => Math.round(number/multiplier)*multiplier;
+
 const WithDualRangeSliderHOC = Component => {
   const WithDualRangeSlider = props => {
     const wrapperRef = useRef(null);
-    const getScale = () => props.scale || props.to - props.from;
-    const getUnit = () => 100 / getScale();
+    const sliderIconRef = useRef(null);
+    const getUnit = () => 100 / (props.to - props.from);
+    const getRangeStartLeft = () => getUnit() * (props.defaultRangeStart - props.from);
+    const getRangeEndLeft = () => getUnit() * (props.defaultRangeEnd - props.from);
     const initialState = {
       rangeSliderWidth: 0,
-      rangeStartLeft: getUnit() * (props.defaultRangeStart - props.from),
-      rangeEndLeft: getUnit() * (props.defaultRangeEnd - props.from),
       activeRange: '',
+      unit: getUnit(),
+      rangeStartLeft: getRangeStartLeft(),
+      rangeEndLeft: getRangeEndLeft(),
       isTouchActive: false,
+      window: {
+        width: getCurrentWindowWidth(),
+      }
     };
     const [state, setState] = useState(initialState);
+    const getSliderIconDiameter = () => Math.round(state.unit * state.rangeSliderWidth / 100) - 1;
     const getXFromEvent = event => {
       const leftAbsolute = !!('ontouchstart' in window) ? event.touches[0].clientX : event.pageX;
       const leftOffset = leftAbsolute - event.currentTarget.getBoundingClientRect().left;
@@ -21,12 +32,12 @@ const WithDualRangeSliderHOC = Component => {
       } else if (leftOffset < 0) {
         return 0;
       } else {
-        return leftOffset;
+        const finalLeftOffset = leftOffset - state.sliderIconDiameter;
+        return leftOffset - state.sliderIconDiameter;
       }
     }
-    const getLeftPercent = event =>
+    const getLeftPercent = event => 
       getXFromEvent(event) / state.rangeSliderWidth * 100;
-    const getRoundedLeft = (percent, activeRange) => Math.floor(percent/getUnit())*getUnit();
     const setStateCb = updateState => latestState => ({
       ...latestState,
       ...updateState
@@ -37,8 +48,8 @@ const WithDualRangeSliderHOC = Component => {
       const rangeStartLeftDiff = Math.abs(rangeStartLeft - left);
       const rangeEndLeftDiff = Math.abs(rangeEndLeft - left);
       const activeRange = rangeStartLeftDiff < rangeEndLeftDiff ? 'rangeStartLeft' : 'rangeEndLeft';
-      const updateState = { ...state, [activeRange]: getRoundedLeft(left, activeRange), activeRange, isTouchActive: true };
-      const rangeDiff = Math.abs(getRangeStart(updateState) - getRangeEnd(updateState));
+      const updateState = { ...state, [activeRange]: getNearestMultipleOf(left, state.unit), activeRange, isTouchActive: true };
+      const rangeDiff = getRangeEnd(updateState) - getRangeStart(updateState);
       const canMove = rangeDiff >= props.rangeDiffLimit;
       if (!canMove) return;
       setState(updateState);
@@ -46,35 +57,44 @@ const WithDualRangeSliderHOC = Component => {
     const onMove = event => {
       if (!state.isTouchActive) return;
       const left = getLeftPercent(event);
-      const updateState = { ...state, [state.activeRange]: getRoundedLeft(left, state.activeRange) };
+      const updateState = { ...state, [state.activeRange]: getNearestMultipleOf(left, state.unit, state.activeRange) };
       const rangeDiff = getRangeEnd(updateState) - getRangeStart(updateState);
       const canMove = rangeDiff >= props.rangeDiffLimit;
       if (!canMove) return;
       setState(updateState);
     }
-    const onTouchEnd = event => {
-      const updateState = { activeRange: '', isTouchActive: false };
-      setState(setStateCb(updateState));
-    }
+    const onTouchEnd = event => setState(setStateCb({ activeRange: '', isTouchActive: false }));
     const getSelectedRangeWidth = () => state.rangeEndLeft - state.rangeStartLeft;
-    const getRangeStart = () =>
-      Math.round(state.rangeStartLeft / getUnit() + props.from);
-    const getRangeEnd = () =>
-      Math.round(state.rangeEndLeft / getUnit() + props.from);
+    const getRangeStart = (currentState = state) =>
+      Math.round(currentState.rangeStartLeft / state.unit + props.from);
+    const getRangeEnd = (currentState = state) =>
+      Math.round(currentState.rangeEndLeft / state.unit + props.from);
     const getRange = () => ({
       start: getRangeStart(),
       end: getRangeEnd()
     })
     const updateScreenSize = event => {
-      const currentWindowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-      setState(setStateCb({ window: { width: currentWindowWidth } }));
+      setState(setStateCb({ window: { width: getCurrentWindowWidth() } }));
     }
-    const getSliderIconDiameter = () => Math.floor(getUnit() * state.rangeSliderWidth / 100) - 1;
+    const onDragStart = event => {
+      event.preventDefault();
+      event.stopPropagation();
+      return false;
+    }
     const isActiveRange = range => state.activeRange === range;
+    /*
+     * below use effect gets called only
+     * if window width screen changes including on load
+     * as range slider's width is fetched via ref
+     * along with diameter of both the slider icons
+     */
     useEffect(() => {
       const { width: rangeSliderWidth } = wrapperRef.current.getBoundingClientRect();
-      const updateState = { ...state, rangeSliderWidth: rangeSliderWidth };
-      setState(updateState);
+      const { width: sliderIconDiameter } = sliderIconRef.current.getBoundingClientRect();
+      setState(setStateCb({
+        rangeSliderWidth,
+        sliderIconDiameter,
+      }));
       window.addEventListener('mouseup', onTouchEnd, false);
       window.addEventListener("resize", updateScreenSize, false);
       window.addEventListener("orientationchange", updateScreenSize, false);
@@ -83,34 +103,47 @@ const WithDualRangeSliderHOC = Component => {
         window.removeEventListener('resize', updateScreenSize);
         window.removeEventListener('orientationchange', updateScreenSize);
       }
-    }, {});
+    }, [state.window.width]);
     /*
      * below use effect gets called only
      * if rangeStartLeft (state), rangeEndLeft (state) or from (props) gets changed
      * as getRange is calculated upon it
      * and onAfterChange (props) hook is to be called when getRange value changes
      */
-    // 
     useEffect(() => {
       props.onAfterChange(getRange());
-    }, [state.rangeStartLeft, state.rangeEndLeft, props.from])
+    }, [state.rangeStartLeft, state.rangeEndLeft, props.from]);
+    /*
+     * below use effect gets called only
+     * if from (props) or to (props) gets changed
+     * as unit, rangeStartLeft and rangeEndLeft is calculated again
+     */
+    useEffect(() => {
+      setState(setStateCb({
+        unit: getUnit(),
+        rangeStartLeft: getRangeStartLeft(),
+        rangeEndLeft: getRangeEndLeft()
+      }));
+    }, [props.from, props.to]);
     return <Component
+        {...props}
+        {...state}
         onTouchStart={onTouchStart}
         onMove={onMove}
         onTouchEnd={onTouchEnd}
+        onDragStart={onDragStart}
         selectedRangeWidth={getSelectedRangeWidth()}
-        {...state}
-        isActiveRange={isActiveRange}
         getRange={getRange}
         getSliderIconDiameter={getSliderIconDiameter}
         wrapperRef={wrapperRef}
-        {...props}
+        isActiveRange={isActiveRange}
+        sliderIconRef={sliderIconRef}
       />
   }
   WithDualRangeSlider.defaultProps = {
     defaultRangeStart: 0,
     defaultRangeEnd: 0,
-    onAfterChange(){}
+    onAfterChange(){},
   }
   return memo(WithDualRangeSlider);
 };

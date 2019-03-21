@@ -21,17 +21,20 @@ const View = props => {
     onTouchStart,
     onMove,
     onTouchEnd,
+    onDragStart,
     isActiveRange,
     getRange,
     rangeStartLeft,
     rangeEndLeft,
     wrapperRef,
-    selectedRangeWidth
+    selectedRangeWidth,
+    sliderIconRef
   } = props;
   const eventListners = {
     [start]: onTouchStart,
     [move]: onMove,
     [up]: onTouchEnd,
+    onDragStart,
   };
   const sliderIconScaling = activeRange => isActiveRange(activeRange) ? 2 : 1;
   const sliderRangeHeight = 2;
@@ -44,13 +47,14 @@ const View = props => {
       </Flex>
       <SliderLineContainer>
         <SliderLineWrapper {...eventListners}>
-          <SliderLine ref={wrapperRef} height={`${sliderRangeHeight}px`} >
+          <SliderLine ref={wrapperRef} height={`${sliderRangeHeight}px`}>
             <SelectedSliderLine left={`${rangeStartLeft}%`} width={`${selectedRangeWidth}%`} />
             <LeftSliderIcon
               diameter={`${getSliderIconDiameter()}px`}
               top={`-${sliderIconPosTop}px`}
               left={`${rangeStartLeft}%`}
               scale={sliderIconScaling('rangeStartLeft')}
+              ref={sliderIconRef} 
             />
             <RightSliderIcon
               diameter={`${getSliderIconDiameter()}px`}

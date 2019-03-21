@@ -29,6 +29,7 @@
     "deploy": "gh-pages -d build",
     "forcestart": "set PORT=3006 yarn && && react-scripts start",
     "buildserve": "yarn build && serve -s build",
+    "serve": "serve -s build",
     "getcoverage": "yarn test --coverage"
   },
   "eslintConfig": {
