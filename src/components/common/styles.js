@@ -4,7 +4,7 @@ export const ResponsiveWidth = styled.div`
   width: ${({ width }) => width};
   margin: ${({ margin = '0 auto' }) => margin};
   @media (max-width: 400px) {
-    width: 90%;
+    width: 95%;
   }
 `;
 

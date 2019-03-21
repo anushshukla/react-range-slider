@@ -41,7 +41,7 @@ const WithDualRangeSliderHOC = Component => {
       end: getRangeEnd()
     });
     const getSliderIconDiameter = () =>
-      Math.round((state.unit * state.rangeSliderWidth) / 100) - 1;
+      Math.ceil((getUnit() / 100) * state.rangeSliderWidth) + 2;
     const getXFromEvent = event => {
       const leftAbsolute =
         'ontouchstart' in window ? event.touches[0].clientX : event.pageX;
@@ -72,6 +72,7 @@ const WithDualRangeSliderHOC = Component => {
       return false;
     };
     const onTouchStart = event => {
+      event.stopPropagation();
       const left = getLeftPercent(event);
       const { rangeStartLeft, rangeEndLeft } = state;
       const rangeStartLeftDiff = Math.abs(rangeStartLeft - left);
@@ -93,6 +94,7 @@ const WithDualRangeSliderHOC = Component => {
     };
     const onMove = event => {
       if (!state.isTouchActive) return;
+      event.stopPropagation();
       const left = getLeftPercent(event);
       const updateState = {
         ...state,

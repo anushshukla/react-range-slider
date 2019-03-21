@@ -4,7 +4,7 @@ export const DualRangeSliderSection = styled.div`
   width: 502px;
   margin: 0 auto;
   @media (max-width: 400px) {
-    width: 95%;
+    width: 100%;
   }
 `;
 
@@ -26,10 +26,11 @@ export const SliderLineContainer = styled.div`
 
 export const SliderLineWrapper = styled.div`
   padding: 10px;
+  margin: 0 -10px;
 `;
 
 export const SliderLine = styled.div`
-  width: 100%;
+  width: 95%;
   margin: 0 auto;
   height: ${props => props.height};
   background: #dfe0e3;

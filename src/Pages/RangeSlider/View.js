@@ -57,18 +57,16 @@ const View = props => {
             <LeftSliderIcon
               diameter={`${getSliderIconDiameter()}px`}
               top={`-${sliderIconPosTop}px`}
-              positionFrom={`${rangeStartLeft === 0 ? 'left' : 'right'}`}
-              positionAt={`${
-                rangeStartLeft === 0 ? 0 : `${100 - rangeStartLeft}%`
-              }`}
+              positionFrom="right"
+              positionAt={`${100 - rangeStartLeft}%`}
               scale={sliderIconScaling('rangeStartLeft')}
               ref={sliderIconRef}
             />
             <RightSliderIcon
               diameter={`${getSliderIconDiameter()}px`}
               top={`-${sliderIconPosTop}px`}
-              positionFrom={`${rangeEndLeft === 100 ? 'right' : 'left'}`}
-              positionAt={`${rangeEndLeft === 100 ? 0 : `${rangeEndLeft}%`}`}
+              positionFrom="left"
+              positionAt={`${rangeEndLeft}%`}
               scale={sliderIconScaling('rangeEndLeft')}
             />
           </SliderLine>
