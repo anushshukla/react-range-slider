@@ -33,7 +33,7 @@ const WithDualRangeSliderHOC = Component => {
         return 0;
       } else {
         const finalLeftOffset = leftOffset - state.sliderIconDiameter;
-        return leftOffset - state.sliderIconDiameter;
+        return finalLeftOffset;
       }
     }
     const getLeftPercent = event => 
