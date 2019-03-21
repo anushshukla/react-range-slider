@@ -5,7 +5,6 @@ import {
   Flex,
   RangeValue,
   SliderLineContainer,
-  SliderLineWrapper,
   SliderLine,
   SelectedSliderLine,
   LeftSliderIcon,
@@ -13,31 +12,18 @@ import {
 } from './styles';
 
 const View = props => {
-  const isTouchSupported = !!('ontouchstart' in window);
-  const start = isTouchSupported ? 'onTouchStart' : 'onMouseDown';
-  const up = isTouchSupported ? 'onTouchEnd' : 'onMouseUp';
-  const move = isTouchSupported ? 'onTouchMove' : 'onMouseMove';
   const {
     getSliderIconDiameter,
-    onTouchStart,
-    onMove,
-    onTouchEnd,
-    onDragStart,
-    onContextMenu,
+    eventListners,
     isActiveRange,
     getRange,
     rangeStartLeft,
     rangeEndLeft,
     wrapperRef,
     selectedRangeWidth,
-    sliderIconRef
+    sliderIconRef,
+    rangeSliderWidth
   } = props;
-  const eventListners = {
-    [start]: onTouchStart,
-    [move]: onMove,
-    [up]: onTouchEnd,
-    onDragStart
-  };
   const sliderIconScaling = activeRange => (isActiveRange(activeRange) ? 2 : 1);
   const sliderRangeHeight = 2;
   const sliderIconPosTop = (getSliderIconDiameter() - sliderRangeHeight) / 2;
@@ -47,30 +33,27 @@ const View = props => {
         <RangeValue>From {getRange().start} years</RangeValue>
         <RangeValue textAlign="right">To {getRange().end} years</RangeValue>
       </Flex>
-      <SliderLineContainer onContextMenu={onContextMenu}>
-        <SliderLineWrapper {...eventListners}>
-          <SliderLine ref={wrapperRef} height={`${sliderRangeHeight}px`}>
-            <SelectedSliderLine
-              left={`${rangeStartLeft}%`}
-              width={`${selectedRangeWidth}%`}
-            />
-            <LeftSliderIcon
-              diameter={`${getSliderIconDiameter()}px`}
-              top={`-${sliderIconPosTop}px`}
-              positionFrom="right"
-              positionAt={`${100 - rangeStartLeft}%`}
-              scale={sliderIconScaling('rangeStartLeft')}
-              ref={sliderIconRef}
-            />
-            <RightSliderIcon
-              diameter={`${getSliderIconDiameter()}px`}
-              top={`-${sliderIconPosTop}px`}
-              positionFrom="left"
-              positionAt={`${rangeEndLeft}%`}
-              scale={sliderIconScaling('rangeEndLeft')}
-            />
-          </SliderLine>
-        </SliderLineWrapper>
+      <SliderLineContainer {...eventListners}>
+        <SliderLine ref={wrapperRef} height={`${sliderRangeHeight}px`}>
+          <SelectedSliderLine
+            width={`${selectedRangeWidth}%`}
+            translate={`${(rangeStartLeft / 100) * rangeSliderWidth}px`}
+          />
+          <LeftSliderIcon
+            diameter={`${getSliderIconDiameter()}px`}
+            top={`-${sliderIconPosTop}px`}
+            translate={`-${rangeSliderWidth -
+              (rangeStartLeft / 100) * rangeSliderWidth}px`}
+            scale={sliderIconScaling('rangeStartLeft')}
+            ref={sliderIconRef}
+          />
+          <RightSliderIcon
+            diameter={`${getSliderIconDiameter()}px`}
+            top={`-${sliderIconPosTop}px`}
+            translate={`${(rangeEndLeft / 100) * rangeSliderWidth}px`}
+            scale={sliderIconScaling('rangeEndLeft')}
+          />
+        </SliderLine>
       </SliderLineContainer>
       <div className="range-ruler">
         <div className="range-start" />
@@ -82,18 +65,15 @@ const View = props => {
 
 View.propTypes = {
   getSliderIconDiameter: PropTypes.func.isRequired,
-  onTouchStart: PropTypes.func.isRequired,
-  onMove: PropTypes.func.isRequired,
-  onTouchEnd: PropTypes.func.isRequired,
-  onDragStart: PropTypes.func.isRequired,
-  onContextMenu: PropTypes.func.isRequired,
   isActiveRange: PropTypes.func.isRequired,
   getRange: PropTypes.func.isRequired,
   rangeStartLeft: PropTypes.number.isRequired,
   rangeEndLeft: PropTypes.number.isRequired,
   wrapperRef: PropTypes.shape({}).isRequired,
   selectedRangeWidth: PropTypes.number.isRequired,
-  sliderIconRef: PropTypes.shape({}).isRequired
+  sliderIconRef: PropTypes.shape({}).isRequired,
+  eventListners: PropTypes.shape({}).isRequired,
+  rangeSliderWidth: PropTypes.number.isRequired
 };
 
 export default memo(View);

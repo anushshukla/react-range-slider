@@ -21,17 +21,11 @@ export const RangeValue = styled.div`
 `;
 
 export const SliderLineContainer = styled.div`
+  padding: 10px;
   margin: 15px 0;
 `;
 
-export const SliderLineWrapper = styled.div`
-  padding: 10px;
-  margin: 0 -10px;
-`;
-
 export const SliderLine = styled.div`
-  width: 95%;
-  margin: 0 auto;
   height: ${props => props.height};
   background: #dfe0e3;
   position: relative;
@@ -40,11 +34,12 @@ export const SliderLine = styled.div`
 export const SelectedSliderLine = styled.div`
   position: absolute;
   top: 0;
-  left: ${props => props.left};
-  width: ${props => props.width};
+  left: 0;
+  width: ${({ width = '100%' }) => width};
   height: 2px;
   background: #00bcd5;
-  transition: all 0.3s ease;
+  transition: all 0.25s ease;
+  transform: translate(${({ translate }) => translate});
 `;
 
 export const SliderIcon = styled.div`
@@ -52,7 +47,6 @@ export const SliderIcon = styled.div`
   top: -5px;
   width: 12px;
   height: 12px;
-  transform: ${({ scale = 1 }) => `scale(${scale})`};
   background: #00bcd5;
   border-radius: 50%;
   box-shadow: -1px 0 2px #cfcfcf;
@@ -61,10 +55,16 @@ export const SliderIcon = styled.div`
     width: ${({ diameter }) => diameter};
     height: ${({ diameter }) => diameter};
   }
-  transition: all 0.45s ease;
+  transition: all 0.25s ease;
+  transform: translate(${({ translate }) => translate})
+    scale(${({ scale = 1 }) => scale});
   ${({ positionFrom, positionAt }) => `${positionFrom}: ${positionAt}`}
 `;
 
-export const LeftSliderIcon = styled(SliderIcon)``;
+export const LeftSliderIcon = styled(SliderIcon)`
+  right: 0;
+`;
 
-export const RightSliderIcon = styled(SliderIcon)``;
+export const RightSliderIcon = styled(SliderIcon)`
+  left: 0;
+`;

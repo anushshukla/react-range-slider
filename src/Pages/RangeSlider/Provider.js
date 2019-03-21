@@ -9,6 +9,8 @@ const getCurrentWindowWidth = () =>
 const getNearestMultipleOf = (number, multiplier) =>
   Math.round(number / multiplier) * multiplier;
 
+const isTouchSupported = () => !!('ontouchstart' in window);
+
 const WithDualRangeSliderHOC = Component => {
   const WithDualRangeSlider = props => {
     const wrapperRef = useRef(null);
@@ -43,17 +45,18 @@ const WithDualRangeSliderHOC = Component => {
     const getSliderIconDiameter = () =>
       Math.ceil((getUnit() / 100) * state.rangeSliderWidth) + 2;
     const getXFromEvent = event => {
-      const leftAbsolute =
-        'ontouchstart' in window ? event.touches[0].clientX : event.pageX;
+      const leftAbsolute = isTouchSupported()
+        ? event.touches[0].clientX
+        : event.pageX;
       const leftOffset =
-        leftAbsolute - event.currentTarget.getBoundingClientRect().left;
+        leftAbsolute - event.currentTarget.getBoundingClientRect().left - 12.5;
       if (leftOffset > state.rangeSliderWidth) {
         return state.rangeSliderWidth;
       }
       if (leftOffset < 0) {
         return 0;
       }
-      const finalLeftOffset = leftOffset - state.sliderIconDiameter;
+      const finalLeftOffset = leftOffset - state.sliderIconDiameter / 2;
       return finalLeftOffset;
     };
     const getLeftPercent = event =>
@@ -71,7 +74,7 @@ const WithDualRangeSliderHOC = Component => {
       event.preventDefault();
       return false;
     };
-    const onTouchStart = event => {
+    const onStart = event => {
       event.stopPropagation();
       const left = getLeftPercent(event);
       const { rangeStartLeft, rangeEndLeft } = state;
@@ -109,7 +112,7 @@ const WithDualRangeSliderHOC = Component => {
       if (!canMove) return;
       setState(updateState);
     };
-    const onTouchEnd = () =>
+    const onEnd = () =>
       setState(setStateCb({ activeRange: '', isTouchActive: false }));
     const updateScreenSize = () => {
       setState(setStateCb({ window: { width: getCurrentWindowWidth() } }));
@@ -134,11 +137,11 @@ const WithDualRangeSliderHOC = Component => {
           sliderIconDiameter
         })
       );
-      window.addEventListener('mouseup', onTouchEnd, false);
+      window.addEventListener('mouseup', onEnd, false);
       window.addEventListener('resize', updateScreenSize, false);
       window.addEventListener('orientationchange', updateScreenSize, false);
       return () => {
-        window.removeEventListener('mouseup', onTouchEnd);
+        window.removeEventListener('mouseup', onEnd);
         window.removeEventListener('resize', updateScreenSize);
         window.removeEventListener('orientationchange', updateScreenSize);
       };
@@ -155,26 +158,31 @@ const WithDualRangeSliderHOC = Component => {
     /*
      * below use effect gets called only
      * if from (props) or to (props) gets changed
-     * as unit, rangeStartLeft and rangeEndLeft is calculated again
+     * as rangeStartLeft and rangeEndLeft is calculated again
      */
     useEffect(() => {
       setState(
         setStateCb({
-          unit: getUnit(),
           rangeStartLeft: getRangeStartLeft(),
           rangeEndLeft: getRangeEndLeft()
         })
       );
     }, [from, to]);
+    const start = isTouchSupported() ? 'onTouchStart' : 'onMouseDown';
+    const up = isTouchSupported() ? 'onTouchEnd' : 'onMouseUp';
+    const move = isTouchSupported() ? 'onTouchMove' : 'onMouseMove';
+    const eventListners = {
+      [start]: onStart,
+      [up]: onEnd,
+      [move]: onMove,
+      onDragStart,
+      onContextMenu
+    };
     return (
       <Component
         {...props}
         {...state}
-        onTouchStart={onTouchStart}
-        onMove={onMove}
-        onTouchEnd={onTouchEnd}
-        onDragStart={onDragStart}
-        onContextMenu={onContextMenu}
+        eventListners={eventListners}
         selectedRangeWidth={getSelectedRangeWidth()}
         getRange={getRange}
         getSliderIconDiameter={getSliderIconDiameter}
