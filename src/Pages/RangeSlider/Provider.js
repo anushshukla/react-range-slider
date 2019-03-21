@@ -67,6 +67,10 @@ const WithDualRangeSliderHOC = Component => {
       event.stopPropagation();
       return false;
     };
+    const onContextMenu = event => {
+      event.preventDefault();
+      return false;
+    };
     const onTouchStart = event => {
       const left = getLeftPercent(event);
       const { rangeStartLeft, rangeEndLeft } = state;
@@ -168,6 +172,7 @@ const WithDualRangeSliderHOC = Component => {
         onMove={onMove}
         onTouchEnd={onTouchEnd}
         onDragStart={onDragStart}
+        onContextMenu={onContextMenu}
         selectedRangeWidth={getSelectedRangeWidth()}
         getRange={getRange}
         getSliderIconDiameter={getSliderIconDiameter}

@@ -23,6 +23,7 @@ const View = props => {
     onMove,
     onTouchEnd,
     onDragStart,
+    onContextMenu,
     isActiveRange,
     getRange,
     rangeStartLeft,
@@ -46,7 +47,7 @@ const View = props => {
         <RangeValue>From {getRange().start} years</RangeValue>
         <RangeValue textAlign="right">To {getRange().end} years</RangeValue>
       </Flex>
-      <SliderLineContainer>
+      <SliderLineContainer onContextMenu={onContextMenu}>
         <SliderLineWrapper {...eventListners}>
           <SliderLine ref={wrapperRef} height={`${sliderRangeHeight}px`}>
             <SelectedSliderLine
@@ -84,6 +85,7 @@ View.propTypes = {
   onMove: PropTypes.func.isRequired,
   onTouchEnd: PropTypes.func.isRequired,
   onDragStart: PropTypes.func.isRequired,
+  onContextMenu: PropTypes.func.isRequired,
   isActiveRange: PropTypes.func.isRequired,
   getRange: PropTypes.func.isRequired,
   rangeStartLeft: PropTypes.number.isRequired,
