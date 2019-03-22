@@ -19,9 +19,10 @@ const View = props => {
     getRange,
     rangeStartLeft,
     rangeEndLeft,
-    wrapperRef,
     selectedRangeWidth,
-    sliderIconRef,
+    wrapperRef,
+    leftSliderIconRef,
+    rightSliderIconRef,
     rangeSliderWidth
   } = props;
   const sliderIconScaling = activeRange => (isActiveRange(activeRange) ? 2 : 1);
@@ -42,16 +43,17 @@ const View = props => {
           <LeftSliderIcon
             diameter={`${getSliderIconDiameter()}px`}
             top={`-${sliderIconPosTop}px`}
+            scale={sliderIconScaling('rangeStartLeft')}
+            ref={leftSliderIconRef}
             translate={`-${rangeSliderWidth -
               (rangeStartLeft / 100) * rangeSliderWidth}px`}
-            scale={sliderIconScaling('rangeStartLeft')}
-            ref={sliderIconRef}
           />
           <RightSliderIcon
             diameter={`${getSliderIconDiameter()}px`}
             top={`-${sliderIconPosTop}px`}
-            translate={`${(rangeEndLeft / 100) * rangeSliderWidth}px`}
             scale={sliderIconScaling('rangeEndLeft')}
+            ref={rightSliderIconRef}
+            translate={`${(rangeEndLeft / 100) * rangeSliderWidth}px`}
           />
         </SliderLine>
       </SliderLineContainer>
@@ -71,7 +73,8 @@ View.propTypes = {
   rangeEndLeft: PropTypes.number.isRequired,
   wrapperRef: PropTypes.shape({}).isRequired,
   selectedRangeWidth: PropTypes.number.isRequired,
-  sliderIconRef: PropTypes.shape({}).isRequired,
+  leftSliderIconRef: PropTypes.shape({}).isRequired,
+  rightSliderIconRef: PropTypes.shape({}).isRequired,
   eventListners: PropTypes.shape({}).isRequired,
   rangeSliderWidth: PropTypes.number.isRequired
 };

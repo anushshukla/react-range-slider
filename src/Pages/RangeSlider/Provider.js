@@ -6,15 +6,16 @@ const getCurrentWindowWidth = () =>
   document.documentElement.clientWidth ||
   document.body.clientWidth;
 
-const getNearestMultipleOf = (number, multiplier) =>
-  Math.round(number / multiplier) * multiplier;
+const getNearestMultipleOf = (number, multiplier, roundTo = 'round') =>
+  Math[roundTo](number / multiplier) * multiplier;
 
 const isTouchSupported = () => !!('ontouchstart' in window);
 
 const WithDualRangeSliderHOC = Component => {
   const WithDualRangeSlider = props => {
     const wrapperRef = useRef(null);
-    const sliderIconRef = useRef(null);
+    const leftSliderIconRef = useRef(null);
+    const rightSliderIconRef = useRef(null);
     const { to, from } = props;
     const getUnit = () => 100 / (to - from);
     const getRangeStartLeft = () =>
@@ -49,15 +50,14 @@ const WithDualRangeSliderHOC = Component => {
         ? event.touches[0].clientX
         : event.pageX;
       const leftOffset =
-        leftAbsolute - event.currentTarget.getBoundingClientRect().left - 12.5;
+        leftAbsolute - event.currentTarget.getBoundingClientRect().left;
       if (leftOffset > state.rangeSliderWidth) {
         return state.rangeSliderWidth;
       }
       if (leftOffset < 0) {
         return 0;
       }
-      const finalLeftOffset = leftOffset - state.sliderIconDiameter / 2;
-      return finalLeftOffset;
+      return leftOffset - state.sliderIconDiameter / 2;
     };
     const getLeftPercent = event =>
       (getXFromEvent(event) / state.rangeSliderWidth) * 100;
@@ -75,7 +75,21 @@ const WithDualRangeSliderHOC = Component => {
       return false;
     };
     const onStart = event => {
-      event.stopPropagation();
+      const isTarget = (ref, element) => ref.current.contains(element);
+      const { target } = event;
+      const isTargeLeftSliderIcon = isTarget(leftSliderIconRef, target);
+      const isTargeRightSliderIcon = isTarget(rightSliderIconRef, target);
+      const isTouchActive = true;
+      if (isTargeLeftSliderIcon || isTargeRightSliderIcon) {
+        setState({
+          ...state,
+          activeRange: isTargeLeftSliderIcon
+            ? 'rangeStartLeft'
+            : 'rangeEndLeft',
+          isTouchActive
+        });
+        return;
+      }
       const left = getLeftPercent(event);
       const { rangeStartLeft, rangeEndLeft } = state;
       const rangeStartLeftDiff = Math.abs(rangeStartLeft - left);
@@ -84,28 +98,28 @@ const WithDualRangeSliderHOC = Component => {
         rangeStartLeftDiff < rangeEndLeftDiff
           ? 'rangeStartLeft'
           : 'rangeEndLeft';
+      const roundTo = activeRange === 'rangeStartLeft' ? 'ceil' : 'floor';
       const updateState = {
         ...state,
-        [activeRange]: getNearestMultipleOf(left, state.unit),
+        [activeRange]: getNearestMultipleOf(left, state.unit, roundTo),
         activeRange,
-        isTouchActive: true
+        isTouchActive
       };
       const rangeDiff = getRangeEnd(updateState) - getRangeStart(updateState);
       const canMove = rangeDiff >= props.rangeDiffLimit;
-      if (!canMove) return;
+      if (!canMove) {
+        setState({ ...state, activeRange, isTouchActive });
+        return;
+      }
       setState(updateState);
     };
     const onMove = event => {
-      if (!state.isTouchActive) return;
       event.stopPropagation();
+      if (!state.isTouchActive) return;
       const left = getLeftPercent(event);
       const updateState = {
         ...state,
-        [state.activeRange]: getNearestMultipleOf(
-          left,
-          state.unit,
-          state.activeRange
-        )
+        [state.activeRange]: getNearestMultipleOf(left, state.unit)
       };
       const rangeDiff = getRangeEnd(updateState) - getRangeStart(updateState);
       const canMove = rangeDiff >= props.rangeDiffLimit;
@@ -130,7 +144,7 @@ const WithDualRangeSliderHOC = Component => {
       } = wrapperRef.current.getBoundingClientRect();
       const {
         width: sliderIconDiameter
-      } = sliderIconRef.current.getBoundingClientRect();
+      } = leftSliderIconRef.current.getBoundingClientRect();
       setState(
         setStateCb({
           rangeSliderWidth,
@@ -188,7 +202,8 @@ const WithDualRangeSliderHOC = Component => {
         getSliderIconDiameter={getSliderIconDiameter}
         wrapperRef={wrapperRef}
         isActiveRange={isActiveRange}
-        sliderIconRef={sliderIconRef}
+        leftSliderIconRef={leftSliderIconRef}
+        rightSliderIconRef={rightSliderIconRef}
       />
     );
   };
