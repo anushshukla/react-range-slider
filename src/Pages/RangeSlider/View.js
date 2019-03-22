@@ -37,8 +37,9 @@ const View = props => {
       <SliderLineContainer {...eventListners}>
         <SliderLine ref={wrapperRef} height={`${sliderRangeHeight}px`}>
           <SelectedSliderLine
-            width={`${selectedRangeWidth}%`}
+            scale={selectedRangeWidth / 100}
             translate={`${(rangeStartLeft / 100) * rangeSliderWidth}px`}
+            height={`${sliderRangeHeight}px`}
           />
           <LeftSliderIcon
             diameter={`${getSliderIconDiameter()}px`}

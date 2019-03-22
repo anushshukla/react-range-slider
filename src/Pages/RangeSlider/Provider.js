@@ -24,7 +24,6 @@ const WithDualRangeSliderHOC = Component => {
     const initialState = {
       rangeSliderWidth: 0,
       activeRange: '',
-      unit: getUnit(),
       rangeStartLeft: getRangeStartLeft(),
       rangeEndLeft: getRangeEndLeft(),
       isTouchActive: false,
@@ -36,9 +35,9 @@ const WithDualRangeSliderHOC = Component => {
     const getSelectedRangeWidth = () =>
       state.rangeEndLeft - state.rangeStartLeft;
     const getRangeStart = (currentState = state) =>
-      Math.round(currentState.rangeStartLeft / state.unit + from);
+      Math.round(currentState.rangeStartLeft / getUnit() + from);
     const getRangeEnd = (currentState = state) =>
-      Math.round(currentState.rangeEndLeft / state.unit + from);
+      Math.round(currentState.rangeEndLeft / getUnit() + from);
     const getRange = () => ({
       start: getRangeStart(),
       end: getRangeEnd()
@@ -74,6 +73,22 @@ const WithDualRangeSliderHOC = Component => {
       event.preventDefault();
       return false;
     };
+    const canMove = ({ rangeEnd, rangeStart }) => {
+      const rangeDiff = rangeEnd - rangeStart;
+      const {
+        rangeStartMin = props.from,
+        rangeStartMax = props.to - props.rangeDiffLimit,
+        rangeEndMin = props.from + props.rangeDiffLimit,
+        rangeEndMax = props.to
+      } = props;
+      return (
+        rangeDiff >= props.rangeDiffLimit &&
+        rangeStart >= rangeStartMin &&
+        rangeStart <= rangeStartMax &&
+        rangeEnd >= rangeEndMin &&
+        rangeEnd <= rangeEndMax
+      );
+    };
     const onStart = event => {
       const isTarget = (ref, element) => ref.current.contains(element);
       const { target } = event;
@@ -101,13 +116,13 @@ const WithDualRangeSliderHOC = Component => {
       const roundTo = activeRange === 'rangeStartLeft' ? 'ceil' : 'floor';
       const updateState = {
         ...state,
-        [activeRange]: getNearestMultipleOf(left, state.unit, roundTo),
+        [activeRange]: getNearestMultipleOf(left, getUnit(), roundTo),
         activeRange,
         isTouchActive
       };
-      const rangeDiff = getRangeEnd(updateState) - getRangeStart(updateState);
-      const canMove = rangeDiff >= props.rangeDiffLimit;
-      if (!canMove) {
+      const rangeStart = getRangeStart(updateState);
+      const rangeEnd = getRangeEnd(updateState);
+      if (!canMove({ rangeStart, rangeEnd })) {
         setState({ ...state, activeRange, isTouchActive });
         return;
       }
@@ -117,13 +132,16 @@ const WithDualRangeSliderHOC = Component => {
       event.stopPropagation();
       if (!state.isTouchActive) return;
       const left = getLeftPercent(event);
+      const { activeRange } = state;
       const updateState = {
         ...state,
-        [state.activeRange]: getNearestMultipleOf(left, state.unit)
+        [activeRange]: getNearestMultipleOf(left, getUnit())
       };
-      const rangeDiff = getRangeEnd(updateState) - getRangeStart(updateState);
-      const canMove = rangeDiff >= props.rangeDiffLimit;
-      if (!canMove) return;
+      const rangeStart = getRangeStart(updateState);
+      const rangeEnd = getRangeEnd(updateState);
+      if (!canMove({ rangeStart, rangeEnd })) {
+        return;
+      }
       setState(updateState);
     };
     const onEnd = () =>
@@ -211,7 +229,11 @@ const WithDualRangeSliderHOC = Component => {
   WithDualRangeSlider.defaultProps = {
     defaultRangeStart: 0,
     defaultRangeEnd: 0,
-    onAfterChange() {}
+    onAfterChange() {},
+    rangeStartMin: undefined,
+    rangeStartMax: undefined,
+    rangeEndMin: undefined,
+    rangeEndMax: undefined
   };
 
   WithDualRangeSlider.propTypes = {
@@ -220,6 +242,10 @@ const WithDualRangeSliderHOC = Component => {
     rangeDiffLimit: PropTypes.number.isRequired,
     defaultRangeStart: PropTypes.number,
     defaultRangeEnd: PropTypes.number,
+    rangeStartMin: PropTypes.number,
+    rangeStartMax: PropTypes.number,
+    rangeEndMin: PropTypes.number,
+    rangeEndMax: PropTypes.number,
     onAfterChange: PropTypes.func
   };
 

@@ -32,17 +32,20 @@ export const SliderLine = styled.div`
 `;
 
 export const SelectedSliderLine = styled.div`
+  transition: all 0.25s ease;
   position: absolute;
   top: 0;
   left: 0;
-  width: ${({ width = '100%' }) => width};
-  height: 2px;
+  width: 100%;
   background: #00bcd5;
-  transition: all 0.25s ease;
-  transform: translate(${({ translate }) => translate});
+  transform-origin: 0px 0px;
+  height: ${props => props.height};
+  transform: translateX(${props => props.translate})
+    scaleX(${props => props.scale});
 `;
 
 export const SliderIcon = styled.div`
+  transition: all 0.25s ease;
   position: absolute;
   top: -5px;
   width: 12px;
@@ -51,12 +54,11 @@ export const SliderIcon = styled.div`
   border-radius: 50%;
   box-shadow: -1px 0 2px #cfcfcf;
   @media (max-width: 400px) {
-    top: ${({ top }) => top};
-    width: ${({ diameter }) => diameter};
-    height: ${({ diameter }) => diameter};
+    top: ${props => props.top};
+    width: ${props => props.diameter};
+    height: ${props => props.diameter};
   }
-  transition: all 0.25s ease;
-  transform: translate(${({ translate }) => translate})
+  transform: translateX(${props => props.translate})
     scale(${({ scale = 1 }) => scale});
   ${({ positionFrom, positionAt }) => `${positionFrom}: ${positionAt}`}
 `;
