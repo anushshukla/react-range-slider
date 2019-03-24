@@ -9,7 +9,7 @@ import {
   SelectedSliderLine,
   LeftSliderIcon,
   RightSliderIcon
-} from './styles';
+} from 'Pages/Demos/RangeSlider/styles';
 
 const View = props => {
   const {

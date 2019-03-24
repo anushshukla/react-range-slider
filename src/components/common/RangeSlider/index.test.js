@@ -1,6 +1,6 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import ComponentToTest from 'Pages/RangeSlider/Provider';
+import ComponentToTest from 'components/common/RangeSlider';
 // import ReactTestUtils from 'react-dom/test-utils';
 
 const props = {

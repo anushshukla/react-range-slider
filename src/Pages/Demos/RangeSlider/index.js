@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import Provider from 'Pages/RangeSlider/Provider';
-import View from 'Pages/RangeSlider/View';
+import React, { useState } from 'react';
+import Provider from 'components/common/RangeSlider';
+import View from 'Pages/Demos/RangeSlider/View';
 import { Label } from 'components/common/styles';
 
 const SliderWithDrag = Provider(View);
 const RangeSlider = props => <SliderWithDrag {...props} />;
 
-export default props => {
+const RangeSliderDemo = props => {
   const [rangeStartMin, setRangeStartMin] = useState(21);
   const [rangeStartMax, setRangeStartMax] = useState(70);
   const [rangeEndMin, setRangeEndMin] = useState(22);
@@ -16,7 +16,6 @@ export default props => {
   const [rangeDiffLimit, setRangeDiffLimit] = useState(1);
   const [to, setTo] = useState(71);
   const [from, setFrom] = useState(21);
-  const [scale, setScale] = useState(to - from);
   const [state, setState] = useState({ response: {} });
   const onAfterChange = response => setState({ response });
   const moreProps = {
@@ -24,7 +23,6 @@ export default props => {
     rangeStartMax,
     rangeEndMin,
     rangeEndMax,
-    scale,
     from,
     to,
     defaultRangeStart,
@@ -32,9 +30,6 @@ export default props => {
     rangeDiffLimit,
     onAfterChange
   };
-  useEffect(() => {
-    setScale(to - from);
-  }, [to, from]);
   const updateInput = updateFunc => event =>
     updateFunc(
       event.target.value ? parseInt(event.target.value, 10) : undefined
@@ -47,16 +42,6 @@ export default props => {
       <input type="number" value={from || ''} onChange={updateInput(setFrom)} />
       &nbsp;&nbsp;<Label htmlFor="">To</Label>&nbsp;&nbsp;
       <input type="number" value={to || ''} onChange={updateInput(setTo)} />
-      <br />
-      <br />
-      <Label htmlFor="">
-        Scale: {scale}
-        <br />
-        (Difference between from and to
-        <br />
-        which gets auto calculated
-        <br /> on changing from and to)
-      </Label>
       <br />
       <br />
       <Label htmlFor="">Range Start Min</Label>
@@ -133,3 +118,5 @@ export default props => {
     </>
   );
 };
+
+export default RangeSliderDemo;

@@ -1,10 +1,6 @@
 import React, { useState, useEffect, useRef, memo } from 'react';
 import PropTypes from 'prop-types';
-
-const getCurrentWindowWidth = () =>
-  window.innerWidth ||
-  document.documentElement.clientWidth ||
-  document.body.clientWidth;
+import { getCurrentWindowWidth } from 'helpers/device';
 
 const getNearestMultipleOf = (number, multiplier, roundTo = 'round') =>
   Math[roundTo](number / multiplier) * multiplier;

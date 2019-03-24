@@ -7,7 +7,7 @@ const Menus = () => (
         <a href="/">Homepage</a>
       </li>
       <li>
-        <a href="demo/range-slider">Range Slider Demo</a>
+        <a href="/demo">Demos</a>
       </li>
     </ul>
   </div>
