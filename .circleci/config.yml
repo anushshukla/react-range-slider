@@ -35,3 +35,17 @@ jobs:
 
       # run tests!
       - run: yarn test
+
+      - run:
+          name: Build
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "develop" ]; then
+              yarn build
+            fi
+
+      - run:
+          name: Deploy
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              yarn deploy
+            fi
