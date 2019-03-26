@@ -43,9 +43,28 @@ jobs:
               yarn build
             fi
 
+      - type: deploy
+        name: "Deploy to sandbox"
+        command: |
+          if [ "${CIRCLE_BRANCH}" == "sandbox" ]; then
+            yarn deploysandbox
+          fi
+
+      - type: deploy
+        name: "Deploy to staging"
+        command: |
+          if [ "${CIRCLE_BRANCH}" == "staging" ]; then
+            yarn deploystaging
+          fi
+
+      - type: deploy
+        name: "Deploy to production"
+        command: |
+          if [ "${CIRCLE_BRANCH}" == "production" ]; then
+            yarn deploy
+          fi
+
       - run:
           name: Deploy
           command: |
-            if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              yarn deploy
-            fi
+            

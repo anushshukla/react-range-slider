@@ -34,12 +34,15 @@
     "react-test-renderer": "^16.8.4"
   },
   "scripts": {
-    "start": "set PORT=3006 && react-scripts start",
+    "start": "react-scripts start",
+    "hardstart": "yarn install && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "deploytogit": "PUBLIC_URL=/react-range-slider yarn build && gh-pages -d build && yarn build",
     "deploy": "aws s3 sync build/ s3://codepipeline-us-east-2-588610745606 --delete",
+    "deploysandbox": "aws s3 sync build/ s3://sandbox.ultimate.com --delete",
+    "deploystaging": "aws s3 sync build/ s3://stage.ultimate.com --delete",
     "freshdeploy": "yarn build && aws s3 sync build/ s3://codepipeline-us-east-2-588610745606 --delete",
     "forcestart": "set PORT=3006 yarn && && react-scripts start",
     "buildserve": "yarn build && serve -s build",
