@@ -229,13 +229,14 @@ const WithDualRangeSliderHOC = Component => {
     rangeStartMin: undefined,
     rangeStartMax: undefined,
     rangeEndMin: undefined,
-    rangeEndMax: undefined
+    rangeEndMax: undefined,
+    rangeDiffLimit: 1
   };
 
   WithDualRangeSlider.propTypes = {
     from: PropTypes.number.isRequired,
     to: PropTypes.number.isRequired,
-    rangeDiffLimit: PropTypes.number.isRequired,
+    rangeDiffLimit: PropTypes.number,
     defaultRangeStart: PropTypes.number,
     defaultRangeEnd: PropTypes.number,
     rangeStartMin: PropTypes.number,

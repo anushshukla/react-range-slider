@@ -36,35 +36,24 @@ jobs:
       # run tests!
       - run: yarn test
 
-      - run:
-          name: Build
-          command: |
-            if [ "${CIRCLE_BRANCH}" == "develop" ]; then
-              yarn build
-            fi
-
       - type: deploy
-        name: "Deploy to sandbox"
+        name: 'Deploy to sandbox'
         command: |
           if [ "${CIRCLE_BRANCH}" == "sandbox" ]; then
             yarn deploysandbox
           fi
 
       - type: deploy
-        name: "Deploy to staging"
+        name: 'Deploy to staging'
         command: |
           if [ "${CIRCLE_BRANCH}" == "staging" ]; then
             yarn deploystaging
           fi
 
       - type: deploy
-        name: "Deploy to production"
+        name: 'Deploy to production'
         command: |
           if [ "${CIRCLE_BRANCH}" == "production" ]; then
             yarn deploy
           fi
 
-      - run:
-          name: Deploy
-          command: |
-            
