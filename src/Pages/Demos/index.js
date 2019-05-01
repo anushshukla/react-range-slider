@@ -8,16 +8,16 @@ const Menus = props => (
     <DemoRoutes {...props} />
     <ul>
       <li>
-        <Link to="/demo/range-slider">Range Slider Demo</Link>
+        <Link to="/demos/range-slider">Range Slider Demo</Link>
       </li>
       <li>
-        <Link to="/demo/ripple">Ripple Demo</Link>
+        <Link to="/demos/ripple">Ripple Demo</Link>
       </li>
       <li>
-        <Link to="/demo/tooltip">Tooltip Demo</Link>
+        <Link to="/demos/tooltip">Tooltip Demo</Link>
       </li>
       <li>
-        <Link to="/demo/virtualization">Virtualization Demo</Link>
+        <Link to="/demos/virtualization">Virtualization Demo</Link>
       </li>
     </ul>
   </div>

@@ -7,10 +7,10 @@ import Virtualization from 'Pages/Demos/Virtualization';
 
 const DemoRoutes = () => (
   <>
-    <Route path="/demo/range-slider" exact component={RangeSlider} />
-    <Route path="/demo/ripple" exact component={Ripple} />
-    <Route path="/demo/tooltip" exact component={Tooltip} />
-    <Route path="/demo/virtualization" exact component={Virtualization} />
+    <Route path="/demos/range-slider" exact component={RangeSlider} />
+    <Route path="/demos/ripple" exact component={Ripple} />
+    <Route path="/demos/tooltip" exact component={Tooltip} />
+    <Route path="/demos/virtualization" exact component={Virtualization} />
   </>
 );
 

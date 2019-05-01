@@ -9,7 +9,13 @@ const Menus = () => (
         <Link to="/">Homepage</Link>
       </li>
       <li>
-        <Link to="/demo">Demos</Link>
+        <Link to="/login">Login</Link>
+      </li>
+      <li>
+        <Link to="/sign-up">Signup</Link>
+      </li>
+      <li>
+        <Link to="/demos">Demos</Link>
       </li>
     </ul>
   </div>
